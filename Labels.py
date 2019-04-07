@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 
-@author: ramon, bojana
+@author: Oscar, Esteban, Maxi
 """
 import re
 import numpy as np
@@ -10,7 +10,7 @@ from skimage import color
 import KMeans as km
 
 def NIUs():
-    return 111111, 222222, 3333333
+    return 1458082, 1455249, 1455249
 
 def loadGT(fileName):
     """@brief   Loads the file with groundtruth content
@@ -112,11 +112,11 @@ def processImage(im, options):
 
 ##  1- CHANGE THE IMAGE TO THE CORRESPONDING COLOR SPACE FOR KMEANS
     if options['colorspace'].lower() == 'ColorNaming'.lower():  
-        pass
+        im = cn.ImColorNamingTSELabDescriptor(im)
     elif options['colorspace'].lower() == 'RGB'.lower():        
-        pass 
+        pass  #?
     elif options['colorspace'].lower() == 'Lab'.lower():        
-        pass
+        im = color.rgb2lab(im)
 
 ##  2- APPLY KMEANS ACCORDING TO 'OPTIONS' PARAMETER
     if options['K']<2: # find the bes K

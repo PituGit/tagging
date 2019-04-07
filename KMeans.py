@@ -1,4 +1,4 @@
-
+# -*- coding: utf-8 -*-
 """
 
 @author: Oscar, Esteban, Maxi
@@ -116,9 +116,9 @@ class KMeans():
 ##  AND CHANGE FOR YOUR OWN CODE
 #######################################################
         if self.options['km_init'].lower() == 'first':
-	        self.centroids = np.array(self.X[:self.K, :]) #Coge los k primeros elementos
-        else:
-	        self.centroids = np.array(self.X[-self.K:, :]) #Coge los k ultimos elementos
+	        self.centroids = np.array(np.unique(self.X, axis=1)[:self.K]) #Coge los k primeros elementos
+        else: #random
+	        self.centroids = np.random.choice(self.X, self.K)
         
         
     def _cluster_points(self):
@@ -143,7 +143,7 @@ class KMeans():
 #######################################################
         self.old_centroids = self.centroids
         
-        #A MEDIAS
+        #NOPE
 
     def _converges(self):
         """@brief   Checks if there is a difference between current and old centroids
@@ -152,9 +152,8 @@ class KMeans():
 ##  YOU MUST REMOVE THE REST OF THE CODE OF THIS FUNCTION
 ##  AND CHANGE FOR YOUR OWN CODE
 #######################################################
-        return all(np.isclose(self.centroids, self.old_centroids, atol=self.options["tolerance"]))
-            #isClose() True si centroid[i] = old_centroid[i] dentro de la tolerancia
-            # all() True si todo True
+        return np.allclose(self.centroids, self.old_centroids, atol=self.options["tolerance"])
+            #True si centroid[i] = old_centroid[i] dentro de la tolerancia, para todo i
         
     def _iterate(self, show_first_time=True):
         """@brief   One iteration of K-Means algorithm. This method should 
