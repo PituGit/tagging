@@ -1,16 +1,17 @@
 
 """
 
-@author: ramon, bojana
+@author: Oscar, Esteban, Maxi
 """
 import numpy as np
 import matplotlib.pyplot as plt
 import mpl_toolkits.mplot3d.axes3d as axes3d
 from sklearn.decomposition import PCA
+from scipy.spatial import distance_matrix
 
 
 def NIUs():
-    return 1458082, "NiuEsteban", "NiuMaxi"
+    return 1458082, 1455249, 1455249
     
 def distance(X,C):
     """@brief   Calculates the distance between each pixcel and each centroid 
@@ -25,7 +26,7 @@ def distance(X,C):
 ##  YOU MUST REMOVE THE REST OF THE CODE OF THIS FUNCTION
 ##  AND CHANGE FOR YOUR OWN CODE
 #########################################################
-    return np.random.rand(X.shape[0],C.shape[0])
+    return distance_matrix(X, C) #Calcula la distancia de todos los pares posibles entre las dos matrices
 
 class KMeans():
     
@@ -58,7 +59,7 @@ class KMeans():
 ##  YOU MUST REMOVE THE REST OF THE CODE OF THIS FUNCTION
 ##  AND CHANGE FOR YOUR OWN CODE
 #######################################################
-        self.X = np.random.rand(100,5)
+        self.X = np.array(np.reshape(X, (-1, X.shape[-1]))) #np.reshape(X, (P,D))
 
             
     def _init_options(self, options):
@@ -115,9 +116,9 @@ class KMeans():
 ##  AND CHANGE FOR YOUR OWN CODE
 #######################################################
         if self.options['km_init'].lower() == 'first':
-	        self.centroids = np.random.rand(self.K,self.X.shape[1])
+	        self.centroids = np.array(self.X[:self.K, :]) #Coge los k primeros elementos
         else:
-	        self.centroids = np.random.rand(self.K,self.X.shape[1])
+	        self.centroids = np.array(self.X[-self.K:, :]) #Coge los k ultimos elementos
         
         
     def _cluster_points(self):
@@ -127,7 +128,9 @@ class KMeans():
 ##  YOU MUST REMOVE THE REST OF THE CODE OF THIS FUNCTION
 ##  AND CHANGE FOR YOUR OWN CODE
 #######################################################
-        self.clusters = np.random.randint(self.K,size=self.clusters.shape)
+        distArray = distance(self.X, self.centroids)
+
+        self.clusters = np.argmin(distArray, axis=1) #Retorna el indice del menor elemento de cada fila de distArray
 
         
     def _get_centroids(self):
@@ -138,8 +141,9 @@ class KMeans():
 ##  YOU MUST REMOVE THE REST OF THE CODE OF THIS FUNCTION
 ##  AND CHANGE FOR YOUR OWN CODE
 #######################################################
-        pass
-                
+        self.old_centroids = self.centroids
+        
+        #A MEDIAS
 
     def _converges(self):
         """@brief   Checks if there is a difference between current and old centroids
@@ -148,7 +152,9 @@ class KMeans():
 ##  YOU MUST REMOVE THE REST OF THE CODE OF THIS FUNCTION
 ##  AND CHANGE FOR YOUR OWN CODE
 #######################################################
-        return True
+        return all(np.isclose(self.centroids, self.old_centroids, atol=self.options["tolerance"]))
+            #isClose() True si centroid[i] = old_centroid[i] dentro de la tolerancia
+            # all() True si todo True
         
     def _iterate(self, show_first_time=True):
         """@brief   One iteration of K-Means algorithm. This method should 
