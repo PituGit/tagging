@@ -132,6 +132,7 @@ class KMeans():
 
         self.clusters = np.argmin(distArray, axis=1) #Retorna el indice del menor elemento de cada fila de distArray
 
+        #self.clusters[i] -> centroide asignado al punto i
         
     def _get_centroids(self):
         """@brief   Calculates coordinates of centroids based on the coordinates 
@@ -142,8 +143,15 @@ class KMeans():
 ##  AND CHANGE FOR YOUR OWN CODE
 #######################################################
         self.old_centroids = self.centroids
+
+        clusterList = {}
         
-        #NOPE
+        for i, point in enumerate(self.X):
+            clusterList.setdefault(self.clusters[i], []).append(point)
+        
+        for i, cluster in clusterList.items():
+            clusterArray = np.array(cluster)
+            self.centroids[i] = clusterArray.mean(axis=0)
 
     def _converges(self):
         """@brief   Checks if there is a difference between current and old centroids

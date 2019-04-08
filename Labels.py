@@ -114,7 +114,7 @@ def processImage(im, options):
     if options['colorspace'].lower() == 'ColorNaming'.lower():  
         im = cn.ImColorNamingTSELabDescriptor(im)
     elif options['colorspace'].lower() == 'RGB'.lower():        
-        pass  #?
+        pass  #Ya estamos en RGB
     elif options['colorspace'].lower() == 'Lab'.lower():        
         im = color.rgb2lab(im)
 
