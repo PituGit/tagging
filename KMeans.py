@@ -11,7 +11,7 @@ from scipy.spatial import distance_matrix
 
 
 def NIUs():
-    return 1458082, 1455249, 1455249
+    return 1458082, 1455249, 1455189
     
 def distance(X,C):
     """@brief   Calculates the distance between each pixcel and each centroid 
