@@ -202,10 +202,15 @@ class KMeans():
 ##  YOU MUST REMOVE THE REST OF THE CODE OF THIS FUNCTION
 ##  AND CHANGE FOR YOUR OWN CODE
 #######################################################
-        self._init_rest(4)
-        self.run()        
-        fit = self.fitting()
-        return 4
+        if self.options['fitting'].lower() == 'fisher':
+            fit = [] #"Recta Fisher"
+            for k in range(2,15):
+                self._init_rest(k)
+                self.run()        
+                fit.append(self.fitting())
+            
+            fit2 = np.gradient(np.gradient(fit)) #Segona derivada "Recta Fisher"
+            return np.argmax(abs(fit2)) + 2 #Maxim 2a deriv. => Colze. Minima K = 2
 
         
     def fitting(self):
