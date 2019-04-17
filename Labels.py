@@ -10,7 +10,7 @@ from skimage import color
 import KMeans as km
 
 def NIUs():
-    return 1458082, 1455249, 1455249
+    return 1458082, 1455249, 1455189
 
 def loadGT(fileName):
     """@brief   Loads the file with groundtruth content
