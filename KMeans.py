@@ -59,7 +59,7 @@ class KMeans():
 ##  YOU MUST REMOVE THE REST OF THE CODE OF THIS FUNCTION
 ##  AND CHANGE FOR YOUR OWN CODE
 #######################################################
-        self.X = np.array(np.reshape(X, (-1, X.shape[-1]))) #np.reshape(X, (P,D))
+        self.X = (np.reshape(X, (-1, X.shape[-1])).astype("float64"))#np.reshape(X, (P,D))
 
             
     def _init_options(self, options):
@@ -115,10 +115,11 @@ class KMeans():
 ##  YOU MUST REMOVE THE REST OF THE CODE OF THIS FUNCTION
 ##  AND CHANGE FOR YOUR OWN CODE
 #######################################################
+        self.centroids= np.zeros((self.K,np.shape(self.X)[-1]))
         if self.options['km_init'].lower() == 'first':
-	        self.centroids = np.array(np.unique(self.X, axis=1)[:self.K]) #Coge los k primeros elementos
+	        self.centroids = (np.unique(self.X, axis=1).astype("float64")[:self.K]) #Coge los k primeros elementos
         else: #random
-	        self.centroids = np.random.choice(self.X, self.K)
+	        self.centroids = (np.random.rand(self.K, self.X.shape[1]).astype("float64")) * 255
         
         
     def _cluster_points(self):
@@ -150,7 +151,7 @@ class KMeans():
             clusterList.setdefault(self.clusters[i], []).append(point)
         
         for i, cluster in clusterList.items():
-            clusterArray = np.array(cluster)
+            clusterArray = np.array(cluster, dtype="float64")
             self.centroids[i] = clusterArray.mean(axis=0)
 
     def _converges(self):
@@ -221,7 +222,18 @@ class KMeans():
 ##  AND CHANGE FOR YOUR OWN CODE
 #######################################################
         if self.options['fitting'].lower() == 'fisher':
-            return np.random.rand(1)
+            intra=np.zeros(self.K)
+            for k in range(self.K):
+                a = distance(self.X[self.clusters==k,:],self.centroids)
+                b = a[:,k]
+                if b != []:
+                    intra[k] = np.sum(b) / b.shape[0]
+                
+            a = self.centroids - np.mean(self.X, axis=0)
+            a = np.sqrt(np.sum(a ** 2, axis=1))
+            intraclass = np.sum(intra) / self.K
+            interclass = np.sum(a) / (self.K)
+            return intraclass/interclass
         else:
             return np.random.rand(1)
 
