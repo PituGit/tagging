@@ -148,14 +148,14 @@ def processImage(im, options):
 ##  2- APPLY KMEANS ACCORDING TO 'OPTIONS' PARAMETER
     if options['K']<2: # find the bes K
         kmeans = km.KMeans(im, 0, options)
-        kmeans.bestK()
+        kmeans.bestK() #bestK segons fitting
     else:
         kmeans = km.KMeans(im, options['K'], options) 
         kmeans.run()
 
 ##  3- GET THE NAME LABELS DETECTED ON THE 11 DIMENSIONAL SPACE
     if options['colorspace'].lower() == 'RGB'.lower():        
-        pass     
+        kmeans.centroids = cn.ImColorNamingTSELabDescriptor(kmeans.centroids)     
 
 #########################################################
 ##  THE FOLLOWING 2 END LINES SHOULD BE KEPT UNMODIFIED
