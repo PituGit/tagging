@@ -107,19 +107,42 @@ class KMeans():
 #############################################################
 
 
-    def _init_centroids(self):
-        """@brief Initialization of centroids
+    """ def _init_centroids(self):
+        @brief Initialization of centroids
         depends on self.options['km_init']
-        """
+        
 #######################################################
 ##  YOU MUST REMOVE THE REST OF THE CODE OF THIS FUNCTION
 ##  AND CHANGE FOR YOUR OWN CODE
 #######################################################
         self.centroids= np.zeros((self.K,np.shape(self.X)[-1]))
         if self.options['km_init'].lower() == 'first':
-	        self.centroids = (np.unique(self.X, axis=1).astype("float64")[:self.K]) #Coge los k primeros elementos
+	        self.centroids = np.sort(np.unique(self.X, axis=1).astype("float64")[:self.K]) #Coge los k primeros elementos
         else: #random
-	        self.centroids = (np.random.rand(self.K, self.X.shape[1]).astype("float64")) * 255
+	        self.centroids = (np.random.rand(self.K, self.X.shape[1]).astype("float64")) * 255 """
+
+    def _init_centroids(self):
+        """@brief Initialization of centroids
+        depends on self.options['km_init']
+        """
+        self.centroids = []
+        
+        if self.options['km_init'].lower() == 'first':
+            # Estem agafant els indexs dels primers K punts de diferent color i 
+            # utilitzant-los per a agafar aquests mateixos punts de la matriu X
+            # Ho fem aixi perque np.unique retorna els valors ordenats i no ho volem
+            # Utilitzem el np.sort perque np.unique no sempre retorna els index en ordre
+            centroidIndexes = np.sort(np.unique(np.around(self.X), axis = 0, return_index = True)[1])[:self.K]
+            if len(centroidIndexes) < self.K:
+                nonUniqueIndex = 0
+                while len(centroidIndexes) < self.K:
+                    if nonUniqueIndex not in centroidIndexes:
+                        centroidIndexes = np.append(centroidIndexes, nonUniqueIndex)
+                    nonUniqueIndex += 1
+            self.centroids = self.X[centroidIndexes]
+        
+        if self.options['km_init'].lower() == 'random':
+            self.centroids = self.X[np.random.random_integers(0, self.X.shape[0]-1,self.K)]
         
         
     def _cluster_points(self):
