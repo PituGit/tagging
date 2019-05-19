@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 import mpl_toolkits.mplot3d.axes3d as axes3d
 from sklearn.decomposition import PCA
 from scipy.spatial import distance_matrix
+from scipy.signal import find_peaks
 
 
 def NIUs():
@@ -230,13 +231,18 @@ class KMeans():
 #######################################################
         if self.options['fitting'].lower() == 'fisher':
             fit = [] #"Recta Fisher"
-            for k in range(2,15):
+            for k in range(2,9):
                 self._init_rest(k)
                 self.run()        
                 fit.append(self.fitting())
-            
-            fit2 = np.gradient(np.gradient(fit)) #Segona derivada "Recta Fisher"
-            return np.argmax(abs(fit2)) + 2 #Maxim 2a deriv. => Colze. Minima K = 2
+
+            fit = list(np.gradient(np.gradient(fit))) #Segona derivada "Recta Fisher"
+
+            best_k = list(find_peaks(fit)[0])[0] + 3 #Maxim local (!= 1r valor) 2a deriv. => Colze. Min K = 2 (+1 por empezar en 0)
+
+            self._init_rest(best_k)
+            self.run()  
+            return best_k
         
     def fitting(self):
         """@brief  return a value describing how well the current kmeans fits the data
