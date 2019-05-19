@@ -215,7 +215,7 @@ class KMeans():
 #######################################################
         if self.options['fitting'].lower() == 'fisher':
             fit = [] #"Recta Fisher"
-            for k in range(2,16):
+            for k in range(2,9):
                 self._init_rest(k)
                 self.run()        
                 fit.append(self.fitting())
