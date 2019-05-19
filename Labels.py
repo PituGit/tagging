@@ -93,19 +93,25 @@ def getLabels(kmeans, options):
 ##  the best color label is less than  options['single_thr']
     name_colors = np.array(['Red', 'Orange', 'Brown', 'Yellow', 'Green', 'Blue', 'Purple', 'Pink', 'Black', 'Grey', 'White'])
     colors = []
+    ind = {}
 
     for centroid in kmeans.centroids:
-        colorIndex = np.flip(np.argsort(centroid)) #Orden descendente
-        sortedCentroid = np.flip(np.sort(centroid))  #Orden descendente
+        colorIndex = np.flip(np.argsort(centroid), 0) #Orden descendente
+        sortedCentroid = np.flip(np.sort(centroid), 0)  #Orden descendente
         
         if sortedCentroid[0] < options['single_thr']:
             composed = sorted([name_colors[colorIndex[0]], name_colors[colorIndex[1]]])
             colors.append(composed[0] + composed[1])
         else:
             colors.append(name_colors[colorIndex[0]])
-    
+
+    for i, color in enumerate(sorted(colors)):
+        ind.setdefault(color, []).append(i)
+
+    ind = list(ind.values())
     colors = sorted(list(set(colors)))
-    return colors, []
+
+    return colors, ind;
 
 def processImage(im, options):
     """@brief   Finds the colors present on the input image
