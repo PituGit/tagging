@@ -138,6 +138,8 @@ def processImage(im, options):
         pass  #Ya estamos en RGB
     elif options['colorspace'].lower() == 'Lab'.lower():        
         im = color.rgb2lab(im)
+        im = np.array(im).reshape((-1,3))
+
 
 ##  2- APPLY KMEANS ACCORDING TO 'OPTIONS' PARAMETER
     if options['K']<2: # find the bes K
@@ -150,6 +152,11 @@ def processImage(im, options):
 ##  3- GET THE NAME LABELS DETECTED ON THE 11 DIMENSIONAL SPACE
     if options['colorspace'].lower() == 'RGB'.lower():        
         kmeans.centroids = cn.ImColorNamingTSELabDescriptor(kmeans.centroids)
+    elif options['colorspace'].lower() == 'Lab'.lower():
+        kmeans.centroids = np.reshape(kmeans.centroids,(-1,1,kmeans.centroids.shape[1]))
+        kmeans.centroids = color.lab2rgb(kmeans.centroids) *255
+        kmeans.centroids = cn.ImColorNamingTSELabDescriptor(kmeans.centroids)
+        kmeans.centroids = np.reshape(kmeans.centroids,(-1,kmeans.centroids.shape[2]))
         
 
 #########################################################
