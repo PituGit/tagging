@@ -143,7 +143,9 @@ class KMeans():
 ##  YOU MUST REMOVE THE REST OF THE CODE OF THIS FUNCTION
 ##  AND CHANGE FOR YOUR OWN CODE
 #######################################################
-        self.old_centroids = self.centroids
+	
+        self.old_centroids = self.centroids.copy()
+
 
         clusterList = {}
         
