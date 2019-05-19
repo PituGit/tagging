@@ -108,39 +108,23 @@ class KMeans():
 #############################################################
 
 
-    """ def _init_centroids(self):
-        @brief Initialization of centroids
-        depends on self.options['km_init']
-        
-#######################################################
-##  YOU MUST REMOVE THE REST OF THE CODE OF THIS FUNCTION
-##  AND CHANGE FOR YOUR OWN CODE
-#######################################################
-        self.centroids= np.zeros((self.K,np.shape(self.X)[-1]))
-        if self.options['km_init'].lower() == 'first':
-	        self.centroids = np.sort(np.unique(self.X, axis=1).astype("float64")[:self.K]) #Coge los k primeros elementos
-        else: #random
-	        self.centroids = (np.random.rand(self.K, self.X.shape[1]).astype("float64")) * 255 """
-
     def _init_centroids(self):
         """@brief Initialization of centroids
         depends on self.options['km_init']
         """
+#######################################################
+##  YOU MUST REMOVE THE REST OF THE CODE OF THIS FUNCTION
+##  AND CHANGE FOR YOUR OWN CODE
+#######################################################
         self.centroids = []
         
         if self.options['km_init'].lower() == 'first':
-            # Estem agafant els indexs dels primers K punts de diferent color i 
-            # utilitzant-los per a agafar aquests mateixos punts de la matriu X
-            # Ho fem aixi perque np.unique retorna els valors ordenats i no ho volem
-            # Utilitzem el np.sort perque np.unique no sempre retorna els index en ordre
-            centroidIndexes = np.sort(np.unique(np.around(self.X), axis = 0, return_index = True)[1])[:self.K]
-            if len(centroidIndexes) < self.K:
-                nonUniqueIndex = 0
-                while len(centroidIndexes) < self.K:
-                    if nonUniqueIndex not in centroidIndexes:
-                        centroidIndexes = np.append(centroidIndexes, nonUniqueIndex)
-                    nonUniqueIndex += 1
-            self.centroids = self.X[centroidIndexes]
+            indexes = np.sort(np.unique(np.around(self.X), axis = 0, return_index = True)[1])[:self.K]
+            if len(indexes) < self.K:
+                for i in range(self.K):
+                    if i not in indexes:
+                        indexes = np.append(indexes, i)
+            self.centroids = self.X[indexes]
         
         if self.options['km_init'].lower() == 'random':
             self.centroids = self.X[np.random.random_integers(0, self.X.shape[0]-1,self.K)]
@@ -231,14 +215,14 @@ class KMeans():
 #######################################################
         if self.options['fitting'].lower() == 'fisher':
             fit = [] #"Recta Fisher"
-            for k in range(2,9):
+            for k in range(2,16):
                 self._init_rest(k)
                 self.run()        
                 fit.append(self.fitting())
 
             fit = list(np.gradient(np.gradient(fit))) #Segona derivada "Recta Fisher"
 
-            best_k = list(find_peaks(fit)[0])[0] + 3 #Maxim local (!= 1r valor) 2a deriv. => Colze. Min K = 2 (+1 por empezar en 0)
+            best_k = list(find_peaks(fit)[0])[0]  + 3 #Maxim local (!= 1r valor) 2a deriv. => Colze. Min K = 2 (+1 por empezar en 0)
 
             self._init_rest(best_k)
             self.run()  
