@@ -236,12 +236,12 @@ class KMeans():
 ##  AND CHANGE FOR YOUR OWN CODE
 #######################################################
         if self.options['fitting'].lower() == 'fisher':
-            intra=np.zeros(self.K)
+            intraList = np.zeros(self.K)
             for k in range(self.K):
                 a = distance(self.X[self.clusters==k,:],self.centroids)
                 b = a[:,k]
                 if b != []:
-                    intra[k] = np.sum(b) / b.shape[0]
+                    intraList[k] = np.sum(b) / b.shape[0]
                 
             a = self.centroids - np.mean(self.X, axis=0)
             a = np.sqrt(np.sum(a ** 2, axis=1))
