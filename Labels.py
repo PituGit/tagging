@@ -91,7 +91,7 @@ def getLabels(kmeans, options):
 #########################################################
 ##  remind to create composed labels if the probability of 
 ##  the best color label is less than  options['single_thr']
-    name_colors = np.array(['Red', 'Orange', 'Brown', 'Yellow', 'Green', 'Blue', 'Purple', 'Pink', 'Black', 'Grey', 'White'])
+    name_colors = cn.colors
     colors = []
     ind = {}
 
@@ -105,10 +105,10 @@ def getLabels(kmeans, options):
         else:
             colors.append(name_colors[colorIndex[0]])
 
-    for i, color in enumerate(sorted(colors)):
+    for i, color in enumerate(colors):
         ind.setdefault(color, []).append(i)
 
-    ind = list(ind.values())
+    ind = [ind[color] for color in sorted(ind.keys())]
     colors = sorted(list(set(colors)))
 
     return colors, ind;
@@ -149,7 +149,8 @@ def processImage(im, options):
 
 ##  3- GET THE NAME LABELS DETECTED ON THE 11 DIMENSIONAL SPACE
     if options['colorspace'].lower() == 'RGB'.lower():        
-        kmeans.centroids = cn.ImColorNamingTSELabDescriptor(kmeans.centroids)     
+        kmeans.centroids = cn.ImColorNamingTSELabDescriptor(kmeans.centroids)
+        
 
 #########################################################
 ##  THE FOLLOWING 2 END LINES SHOULD BE KEPT UNMODIFIED
