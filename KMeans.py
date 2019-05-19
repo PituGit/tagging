@@ -237,7 +237,6 @@ class KMeans():
             
             fit2 = np.gradient(np.gradient(fit)) #Segona derivada "Recta Fisher"
             return np.argmax(abs(fit2)) + 2 #Maxim 2a deriv. => Colze. Minima K = 2
-
         
     def fitting(self):
         """@brief  return a value describing how well the current kmeans fits the data
