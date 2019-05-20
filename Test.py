@@ -193,7 +193,7 @@ def TestSolution(Test, Options, GTFile, NImage, tests):
     ######################################################################################################
     ######################################################################################################
     ######################################################################################################
-    if 6 in tests:
+    """ if 6 in tests:
         Message = '-6 testing color labels extraction (simple labels)'
 
         File = TestFolder + '%02d'%Test + Message + '.txt'
@@ -283,7 +283,7 @@ def TestSolution(Test, Options, GTFile, NImage, tests):
         random.shuffle(B)
         D = lb.similarityMetric(A,B, Options)
         Results.append(CheckTest(Message, D, File, student))
-        Messages.append(Message)
+        Messages.append(Message) """
     
     if student:
         print("\n\n\n                SUMMARY  TEST " + str(Test))

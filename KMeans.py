@@ -222,7 +222,7 @@ class KMeans():
 
             fit = list(np.gradient(np.gradient(fit))) #Segona derivada "Recta Fisher"
 
-            best_k = list(find_peaks(fit)[0])[0]  + 3 #Maxim local (!= 1r valor) 2a deriv. => Colze. Min K = 2 (+1 por empezar en 0)
+            best_k = list(find_peaks(fit)[0])[0]  + 3 #Maxim local 2a deriv. => Colze. Min K = 2 (+1 por empezar en 0)
 
             self._init_rest(best_k)
             self.run()  
@@ -245,7 +245,7 @@ class KMeans():
                 
             a = self.centroids - np.mean(self.X, axis=0)
             a = np.sqrt(np.sum(a ** 2, axis=1))
-            intraclass = np.sum(intra) / self.K
+            intraclass = np.sum(intraList) / self.K
             interclass = np.sum(a) / (self.K)
             return intraclass/interclass
         else:

@@ -12,7 +12,7 @@ from skimage import io
 import numpy as np
 import matplotlib.pyplot as plt
 
-im = io.imread('Images/0047.jpg')
+im = io.imread('Images/0047.png')
 plt.figure(1)
 plt.imshow(im)
 plt.axis('off')
